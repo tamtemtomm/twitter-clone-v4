@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true })); // to parse from ulencoded data
 if (process.env.NODE_ENV === "production") {
   app.use(
     cors({
-      origin: ["https://twitter-clone-api-sage.vercel.app"],
+      origin: ["https://twitter-clone-api-git-main-tamtemtoms-projects.vercel.app"],
       methods: ["POST", "GET", "DELETE"],
       credentials: true,
     })
