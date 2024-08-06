@@ -1,0 +1,14 @@
+{
+  "name": "twitter-clone-v4",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd server && npm start",
+    "build": "npm run build --prefix client && npm run build --prefix server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
