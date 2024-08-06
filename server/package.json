@@ -5,7 +5,7 @@
   "scripts": {
     "start": "NODE_ENV=production node ./dist/index.js",
     "build-dev": "tsc -b",
-    "build":"npm i && tsc -b",
+    "build":"npm i",
     "dev": "NODE_ENV=development nodemon ./index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
