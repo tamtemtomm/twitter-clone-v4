@@ -45,9 +45,9 @@ export const ProfileText = ({
   style = "flex flex-col",
 }: ProfileTextInterface) => {
   return (
-    <div className={`${style}`}>
+    <Link className={`${style}`} to={`/profile/${username}`}>
       <span className={fullNameStyle}>{fullName}</span>
       <span className={usernameStyle}>@{username}</span>
-    </div>
+    </Link>
   );
 };

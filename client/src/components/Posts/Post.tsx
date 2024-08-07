@@ -1,26 +1,23 @@
 // Import Dependencies
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 // Import components
-import {Avatar} from "../ProfileComponent";
-import LoadingSpinner from "../LoadingSpinner";
+import { Avatar } from "../ProfileComponent";
+
+// Import post components
+import PostMenu, { PostCommentModal, PostLikeMenu } from "./PostMenu";
+import PostOwner from "./PostOwner";
+import PostContent from "./PostContent";
 
 // Import Icons from react-icons
-import PostMenu, { PostCommentModal } from "./PostMenu";
 import { FaRegComment } from "react-icons/fa";
-import { FaRegHeart } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa6";
-import { FaTrash } from "react-icons/fa";
 import { BiRepost } from "react-icons/bi";
 
 // Import all interfaces
-import {
-  PostsInterface,
-  PostInterface,
-} from "../../interface/PostInterface";
+import { PostsInterface, PostInterface } from "../../interface/PostInterface";
 import { UserInterface } from "../../interface/UserInterface";
 
 // Import format date function
@@ -44,9 +41,6 @@ const Post = ({ post }: PostsInterface) => {
 
   // Set the initial state of liked
   const isLiked = post.likes?.includes((authUser as UserInterface)._id);
-
-  // Get the post formatted date
-  const formattedDate = formatPostDate(post.createdAt);
 
   // Initialize state mutation function for like the post
   const { mutate: likePostMutation, isPending: isLikePending } = useMutation({
@@ -149,7 +143,7 @@ const Post = ({ post }: PostsInterface) => {
     });
 
   // Function if to handle delete trash icon,
-  const handleDeletePost = (e: unknown) => {
+  const handleDeletePost = (e: any) => {
     e.preventDefault();
     deletePostMutation();
   };
@@ -180,45 +174,23 @@ const Post = ({ post }: PostsInterface) => {
           handlePostComment={handlePostComment}
         />
 
+        {/* Add Avatar to post using avatar components */}
         <Avatar img={postOwner.profileImg} username={postOwner.username} />
 
+         {/* Add owner using post owner components */}
         <div className="flex flex-col flex-1">
-          <div className="flex gap-2 items-center">
-            <Link to={`/profile/${postOwner.username}`} className="font-bold">
-              {postOwner.fullName}
-            </Link>
-            <span className="text-gray-700 flex gap-1 text-sm">
-              <Link to={`/profile/${postOwner.username}`}>
-                @{postOwner.username}
-              </Link>
-              <span>·</span>
-              <span>{formattedDate}</span>
-            </span>
-            {/* Check the post is the current user's so they can't delete
-              other's posts */}
-            {isMyPost && (
-              <span className="flex justify-end flex-1">
-                {!isDeletePending && (
-                  <FaTrash
-                    className="cursor-pointer hover:text-red-500"
-                    onClick={handleDeletePost}
-                  />
-                )}
-                {/* Show loading spinner in pending state*/}
-                {isDeletePending && <LoadingSpinner size="sm" />}
-              </span>
-            )}
-          </div>
-          <div className="flex flex-col gap-3 overflow-hidden">
-            <span>{post.text}</span>
-            {post.img && (
-              <img
-                src={post.img}
-                className="h-80 object-contain rounded-lg border border-gray-700"
-                alt=""
-              />
-            )}
-          </div>
+          <PostOwner
+            fullName={postOwner.fullName}
+            username={postOwner.username}
+            formattedDate={formatPostDate(post.createdAt)}
+            isMyPost={isMyPost}
+            isDeletePending={isDeletePending}
+            handleDeletePost={handleDeletePost}
+          />
+
+          {/* Add content using post content components */}
+          <PostContent text={post.text} img={post.img} />
+
           <div className="flex justify-between mt-3">
             <div className="flex gap-4 items-center w-2/3 justify-between">
               {/* Add repost icon*/}
@@ -236,27 +208,12 @@ const Post = ({ post }: PostsInterface) => {
 
               {/* Add repost icon*/}
               <PostMenu Icon={BiRepost} label={0} iconSize={6} />
-              <div
-                className="flex gap-1 items-center group cursor-pointer"
+              <PostLikeMenu
                 onClick={handleLikePost}
-              >
-                {/*Add liek icon*/}
-                {/*Check is it pending */}
-                {!isLiked && !isLikePending && (
-                  <FaRegHeart className="w-4 h-4 cursor-pointer text-slate-500 group-hover:text-pink-500" />
-                )}
-                {isLiked && !isLikePending && (
-                  <FaRegHeart className="w-4 h-4 cursor-pointer text-pink-500 " />
-                )}
-                {isLikePending && <LoadingSpinner size="sm" />}
-                <span
-                  className={`text-sm  group-hover:text-pink-500 ${
-                    isLiked ? "text-pink-500" : "text-slate-500"
-                  }`}
-                >
-                  {post.likes?.length}
-                </span>
-              </div>
+                isLiked={isLiked}
+                isLikePending={isLikePending}
+                label={post.likes?.length}
+              />
             </div>
             <div className="flex w-1/3 justify-end gap-2 items-center">
               <FaRegBookmark className="w-4 h-4 text-slate-500 cursor-pointer" />

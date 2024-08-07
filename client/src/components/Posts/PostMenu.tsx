@@ -1,12 +1,21 @@
 import { IconType } from "react-icons";
+import { FaRegHeart } from "react-icons/fa";
 import LoadingSpinner from "../LoadingSpinner";
 import { PostInterface } from "../../interface/PostInterface";
 
 export interface PostMenu {
   Icon: IconType;
   onClick?: () => void;
-  label: number;
-  iconSize?:number;
+  label?: number;
+  iconSize?: number;
+  iconStyle?: string;
+}
+
+export interface PostLikeMenu {
+  onClick: () => void;
+  label: number | undefined;
+  isLiked: boolean | undefined;
+  isLikePending: boolean | undefined;
 }
 
 export interface PostCommentModalInterface {
@@ -17,16 +26,46 @@ export interface PostCommentModalInterface {
   handlePostComment: (e: React.FormEvent) => void;
 }
 
-
-export const PostMenu = ({ Icon, iconSize=4, ...props }: PostMenu) => {
+export const PostMenu = ({
+  Icon,
+  iconSize = 4,
+  iconStyle = " text-slate-500 group-hover:text-sky-400",
+  ...props
+}: PostMenu) => {
   return (
     <div
       className="flex gap-1 items-center cursor-pointer group"
       onClick={props.onClick}
     >
-      <Icon className={`w-${iconSize} h-${iconSize}  text-slate-500 group-hover:text-sky-400`} />
-      <span className="text-sm text-slate-500 group-hover:text-sky-400">
-        {props.label}
+      <Icon className={`w-${iconSize} h-${iconSize} ${iconStyle}`} />
+      {props.label && (
+        <span className={`text-sm ${iconStyle}`}>{props.label}</span>
+      )}
+    </div>
+  );
+};
+
+export const PostLikeMenu = ({ label = 0, ...props } : PostLikeMenu) => {
+  return (
+    <div
+      className="flex gap-1 items-center group cursor-pointer"
+      onClick={props.onClick}
+    >
+      {/*Add liek icon*/}
+      {/*Check is it pending */}
+      {!props.isLiked && !props.isLikePending && (
+        <FaRegHeart className="w-4 h-4 cursor-pointer text-slate-500 group-hover:text-pink-500" />
+      )}
+      {props.isLiked && !props.isLikePending && (
+        <FaRegHeart className="w-4 h-4 cursor-pointer text-pink-500 " />
+      )}
+      {props.isLikePending && <LoadingSpinner size="sm" />}
+      <span
+        className={`text-sm  group-hover:text-pink-500 ${
+          props.isLiked ? "text-pink-500" : "text-slate-500"
+        }`}
+      >
+        {label}
       </span>
     </div>
   );
