@@ -12,13 +12,14 @@ import useFollow from "../../hooks/useFollow";
 
 // Import user interface
 import { UserInterface } from "../../interface/UserInterface";
+import { PORT } from "../../constant";
 
 const Explore = () => {
   const { data: suggestedUsers, isLoading } = useQuery({
     queryKey: ["suggestedUsers"],
     queryFn: async () => {
       try {
-        const res = await fetch("/api/users/suggested");
+        const res = await fetch(`${PORT}/api/users/suggested`);
         const data = await res.json();
 
         if (!res.ok) {

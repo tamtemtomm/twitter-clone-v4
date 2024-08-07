@@ -22,6 +22,7 @@ import { UserInterface } from "../../interface/UserInterface";
 
 // Import format date function
 import { formatPostDate } from "../../utils/date";
+import { PORT } from "../../constant";
 
 const Post = ({ post }: PostsInterface) => {
   // Initial query clients state
@@ -47,7 +48,7 @@ const Post = ({ post }: PostsInterface) => {
     mutationFn: async () => {
       try {
         // Make a post req using tanstack to like the post
-        const res = await fetch(`/api/posts/like/${post._id}`, {
+        const res = await fetch(`${PORT}/api/posts/like/${post._id}`, {
           method: "POST",
         });
 
@@ -89,7 +90,7 @@ const Post = ({ post }: PostsInterface) => {
     useMutation({
       mutationFn: async () => {
         try {
-          const res = await fetch(`/api/posts/comment/${post._id}`, {
+          const res = await fetch(`${PORT}/api/posts/comment/${post._id}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text: comment }),
@@ -120,7 +121,7 @@ const Post = ({ post }: PostsInterface) => {
     useMutation({
       mutationFn: async () => {
         try {
-          const res = await fetch(`/api/posts/${post._id}`, {
+          const res = await fetch(`${PORT}/api/posts/${post._id}`, {
             method: "DELETE",
           });
           const data = await res.json();

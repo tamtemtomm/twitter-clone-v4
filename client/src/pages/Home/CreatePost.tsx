@@ -5,6 +5,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { UserInterface } from "../../interface/UserInterface";
+import { PORT } from "../../constant";
 
 const CreatePost = () => {
   const [text, setText] = useState("");
@@ -27,7 +28,7 @@ const CreatePost = () => {
       img?: string | null;
     }) => {
       try {
-        const res = await fetch("/api/posts/create", {
+        const res = await fetch(`${PORT}/api/posts/create`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text, img }),

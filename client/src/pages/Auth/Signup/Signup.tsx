@@ -10,6 +10,7 @@ import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
 import { MdDriveFileRenameOutline } from "react-icons/md";
+import { PORT } from "../../../constant";
 
 // Setup Signup Form Types
 interface SignupFormInterface {
@@ -39,7 +40,7 @@ const Signup = () => {
       try {
         // Send post request using tanstack
         const res = await fetch(
-          "/api/auth/signup", // {Proxy/api/auth/signup}
+          `${PORT}/api/auth/signup`, // {Proxy/api/auth/signup}
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

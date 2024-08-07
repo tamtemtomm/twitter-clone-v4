@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { PORT } from "../constant";
 
 // Set this ANNOYING interface
 interface UpdateProfileFormDataInterFace {
@@ -21,7 +22,7 @@ const useUpdateUserProfile = () => {
       // Send the body trough mutation function
       mutationFn: async (formData: UpdateProfileFormDataInterFace) => {
         try {
-          const res = await fetch("/api/users/update", {
+          const res = await fetch(`${PORT}/api/users/update`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData),

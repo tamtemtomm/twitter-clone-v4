@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Explore from "./components/Explore/Explore";
 import Profile from "./pages/Profile/Profile";
 import LoadingSpinner from "./components/LoadingSpinner";
+import { PORT } from "./constant";
 
 function App() {
   // Set authUser state to protect auth route using useQuery
@@ -24,7 +25,8 @@ function App() {
     queryKey: ["authUser"],
     queryFn: async () => {
       try { 
-        const res = await fetch("/api/auth/me");
+        const res = await fetch(`${PORT}/api/auth/me`);
+        console.log(res)
         const data = await res.json();
 
         if (data.error || data === 401 || !res.ok) {

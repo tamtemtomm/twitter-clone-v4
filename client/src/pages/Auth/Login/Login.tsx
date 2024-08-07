@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import XLogo from "../../../components/XLogo";
 import { MdOutlineMail } from "react-icons/md";
 import { MdPassword } from "react-icons/md";
+import { PORT } from "../../../constant";
 
 // Setup Login Form Types
 interface LoginFormInterface {
@@ -36,7 +37,7 @@ const LoginPage = () => {
     mutationFn: async ({ username, password }: LoginFormInterface) => {
       try {
         const res = await fetch(
-          "/api/auth/login", // {Proxy/api/auth/login}
+          `${PORT}/api/auth/login`, // {Proxy/api/auth/login}
           {
             method: "POST",
             headers: {

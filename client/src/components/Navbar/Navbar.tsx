@@ -14,6 +14,7 @@ import { BiLogOut } from "react-icons/bi";
 
 // Import user interface
 import { UserInterface } from "../../interface/UserInterface";
+import { PORT } from "../../constant";
 
 const Navbar = () => {
   // Initialize queryClient Hook
@@ -28,7 +29,7 @@ const Navbar = () => {
     mutationFn: async () => {
       try {
         // Send logout post req using tanstack
-        const res = await fetch("api/auth/logout", { method: "POST" });
+        const res = await fetch(`${PORT}api/auth/logout`, { method: "POST" });
         const data = await res.json();
         if (!res.ok) {
           throw new Error(data.error || "Something went wrong");
