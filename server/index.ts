@@ -36,14 +36,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notificationRoutes);
 
 app.get("/*", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "..", "..", "client", "dist", "index.html"),
-    (err) => {
-      if (err) {
-        console.log(err);
-      }
-    }
-  );
+  res.json({ message: "hello" });
 });
 
 if (process.env.NODE_ENV === "production") {
