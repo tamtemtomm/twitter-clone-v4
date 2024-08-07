@@ -5,6 +5,7 @@ export interface NavbarMenuInterface {
   Icon: IconType;
   to: string;
   label: string;
+  onClick?: string;
 }
 
 const NavbarMenu = ({ Icon, ...props }: NavbarMenuInterface) => {

@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 // Import loading spinner components
-import LoadingSpinner from "../../components/Common/LoadingSpinner";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 // Import Icons
 import { IoSettingsOutline } from "react-icons/io5";

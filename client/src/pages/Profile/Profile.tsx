@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 // Import components
-import Posts from "../../components/Common/Posts";
+import Posts from "../../components/Posts/Posts";
 import ProfileHeaderSkeleton from "../../components/Skeletons/ProfileHeaderSkeleton";
 import EditProfileModal from "./EditProfileModal";
 

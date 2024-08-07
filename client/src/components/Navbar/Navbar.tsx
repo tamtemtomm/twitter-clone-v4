@@ -9,6 +9,7 @@ import { getNavbarMenuList } from "./NavbarMenuList";
 
 // Import Icon
 import XLogo from "../XLogo";
+import { Avatar, ProfileText } from "../ProfileComponent";
 import { BiLogOut } from "react-icons/bi";
 
 // Import user interface
@@ -17,6 +18,10 @@ import { UserInterface } from "../../interface/UserInterface";
 const Navbar = () => {
   // Initialize queryClient Hook
   const queryClient = useQueryClient();
+
+  // Fetch data from query key
+  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+  const NavbarMenuList = getNavbarMenuList(authUser as UserInterface);
 
   // Add logout mutation state
   const { mutate: logoutMutate, error } = useMutation({
@@ -42,10 +47,6 @@ const Navbar = () => {
     },
   });
 
-  // Fetch data from query key
-  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
-  const NavbarMenuList = getNavbarMenuList(authUser as UserInterface);
-
   return (
     <nav className="flex flex-col py-3 pl-12 pr-6 w-1/4 min-w-24 h-screen border-r border-gray-700 sticky top-0 left-0 justify-between">
       <div className="flex flex-col gap-y-3 ">
@@ -62,25 +63,18 @@ const Navbar = () => {
         to="/"
         className="flex flex-row justify-between gap-x-2 pt-2 py-2 pl-2 pr-3 rounded-full  hover:bg-stone-900 transition-all duration-300 max-w-fit"
       >
-        <div className="avatar hidden md:inline-flex">
-          <div className="w-8 rounded-full">
-            <img
-              src={
-                (authUser as UserInterface)?.profileImg ||
-                "/avatar-placeholder.png"
-              }
-            />
-          </div>
-        </div>
+        <Avatar
+          img={(authUser as UserInterface)?.profileImg}
+          style={"hidden md:inline-flex"}
+          username={(authUser as UserInterface)?.username}
+        />
         <div className="flex justify-start flex-1 gap-x-4">
-          <div className="hidden lg:block">
-            <p className="text-white font-bold text-xs w-20 truncate">
-              {(authUser as UserInterface)?.fullName || "fullName"}
-            </p>
-            <p className="text-slate-500 text-xs">
-              @{(authUser as UserInterface)?.username || "username"}
-            </p>
-          </div>
+          <ProfileText
+            fullName={(authUser as UserInterface)?.fullName || "fullName"}
+            username={(authUser as UserInterface)?.username || "username"}
+            style="hidden flex-col lg:flex"
+            fullNameStyle="text-white font-bold text-xs w-20 truncate"
+          />
           <BiLogOut
             className="w-5 h-5 cursor-pointer"
             onClick={(e) => {

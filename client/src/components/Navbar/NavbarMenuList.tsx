@@ -6,10 +6,11 @@ import { BsThreeDots } from "react-icons/bs";
 import { NavbarMenuInterface } from "./NavbarMenu";
 import { UserInterface } from "../../interface/UserInterface";
 
+
 export const getNavbarMenuList = (authUser: UserInterface) => {
   const NavbarMenuList: NavbarMenuInterface[] = [
     { Icon: FaHome, to: "/", label: "Home" },
-    { Icon: FaSearch, to: "/", label: "Explore" },
+    { Icon: FaSearch, to: "/", label: "Explore", },
     { Icon: FaBell, to: "/notifications", label: "Notifications" },
     { Icon: FaMessage, to: "/", label: "Message" },
     { Icon: IoPeopleSharp, to: "/", label: "Community" },

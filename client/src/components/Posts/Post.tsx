@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-// Import Loading spinner components
-import LoadingSpinner from "./LoadingSpinner";
+// Import components
+import {Avatar} from "../ProfileComponent";
+import LoadingSpinner from "../LoadingSpinner";
 
 // Import Icons from react-icons
+import PostMenu, { PostCommentModal } from "./PostMenu";
 import { FaRegComment } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa6";
@@ -15,7 +17,10 @@ import { FaTrash } from "react-icons/fa";
 import { BiRepost } from "react-icons/bi";
 
 // Import all interfaces
-import { PostsInterface, PostInterface } from "../../interface/PostInterface";
+import {
+  PostsInterface,
+  PostInterface,
+} from "../../interface/PostInterface";
 import { UserInterface } from "../../interface/UserInterface";
 
 // Import format date function
@@ -80,7 +85,7 @@ const Post = ({ post }: PostsInterface) => {
         });
       });
     },
-    onError: (error: {message:string}) => {
+    onError: (error: { message: string }) => {
       toast.error(error.message);
     },
   });
@@ -111,7 +116,7 @@ const Post = ({ post }: PostsInterface) => {
         // invalidate the queries so it can fetch the posts again and refresh the page
         queryClient.invalidateQueries({ queryKey: ["posts"] });
       },
-      onError: (err: {message:string}) => {
+      onError: (err: { message: string }) => {
         toast.error(err.message);
       },
     });
@@ -144,9 +149,7 @@ const Post = ({ post }: PostsInterface) => {
     });
 
   // Function if to handle delete trash icon,
-  const handleDeletePost = (
-    e: any
-  ) => {
+  const handleDeletePost = (e: unknown) => {
     e.preventDefault();
     deletePostMutation();
   };
@@ -167,15 +170,18 @@ const Post = ({ post }: PostsInterface) => {
   return (
     <>
       <div className="flex gap-2 items-start p-4 border-b border-gray-700">
-        <div className="avatar">
-          <Link
-            to={`/profile/${postOwner.username}`}
-            className="w-8 rounded-full overflow-hidden"
-          >
-            {/*Show the default img if the user don't have the profileImg */}
-            <img src={postOwner.profileImg || "/avatar-placeholder.png"} />
-          </Link>
-        </div>
+        {/* We're using Modal Component from DaisyUI */}
+        {/* This below component will show up only when the showModal Function called */}
+        <PostCommentModal
+          post={post}
+          comment={comment}
+          setComment={setComment}
+          isCommentPending={isCommentPending}
+          handlePostComment={handlePostComment}
+        />
+
+        <Avatar img={postOwner.profileImg} username={postOwner.username} />
+
         <div className="flex flex-col flex-1">
           <div className="flex gap-2 items-center">
             <Link to={`/profile/${postOwner.username}`} className="font-bold">
@@ -215,87 +221,26 @@ const Post = ({ post }: PostsInterface) => {
           </div>
           <div className="flex justify-between mt-3">
             <div className="flex gap-4 items-center w-2/3 justify-between">
-              <div
-                className="flex gap-1 items-center cursor-pointer group"
+              {/* Add repost icon*/}
+              <PostMenu
+                Icon={FaRegComment}
                 onClick={() =>
                   (
-                    document.getElementById("comments_modal" + post._id) as HTMLDialogElement
+                    document.getElementById(
+                      "comments_modal" + post._id
+                    ) as HTMLDialogElement
                   ).showModal()
                 }
-              >
-                <FaRegComment className="w-4 h-4  text-slate-500 group-hover:text-sky-400" />
-                <span className="text-sm text-slate-500 group-hover:text-sky-400">
-                  {post.comments?.length || 0}
-                </span>
-              </div>
-              {/* We're using Modal Component from DaisyUI */}
-              <dialog
-                id={`comments_modal${post._id}`}
-                className="modal border-none outline-none"
-              >
-                <div className="modal-box rounded border border-gray-600">
-                  <h3 className="font-bold text-lg mb-4">COMMENTS</h3>
-                  <div className="flex flex-col gap-3 max-h-60 overflow-auto">
-                    {post.comments?.length === 0 && (
-                      <p className="text-sm text-slate-500">
-                        No comments yet 🤔 Be the first one 😉
-                      </p>
-                    )}
-                    {post.comments?.map((comment: PostInterface) => (
-                      <div key={comment._id} className="flex gap-2 items-start">
-                        <div className="avatar">
-                          <div className="w-8 rounded-full">
-                            <img
-                              src={
-                                comment.user.profileImg ||
-                                "/avatar-placeholder.png"
-                              }
-                            />
-                          </div>
-                        </div>
-                        <div className="flex flex-col">
-                          <div className="flex items-center gap-1">
-                            <span className="font-bold">
-                              {comment.user.fullName}
-                            </span>
-                            <span className="text-gray-700 text-sm">
-                              @{comment.user.username}
-                            </span>
-                          </div>
-                          <div className="text-sm">{comment.text}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <form
-                    className="flex gap-2 items-center mt-4 border-t border-gray-600 pt-2"
-                    onSubmit={handlePostComment}
-                  >
-                    <textarea
-                      className="textarea w-full p-1 rounded text-md resize-none border focus:outline-none  border-gray-800"
-                      placeholder="Add a comment..."
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                    />
-                    <button className="btn btn-primary rounded-full btn-sm text-white px-4">
-                      {isCommentPending ? <LoadingSpinner size="md" /> : "Post"}
-                    </button>
-                  </form>
-                </div>
-                <form method="dialog" className="modal-backdrop">
-                  <button className="outline-none">close</button>
-                </form>
-              </dialog>
-              <div className="flex gap-1 items-center group cursor-pointer">
-                <BiRepost className="w-6 h-6  text-slate-500 group-hover:text-green-500" />
-                <span className="text-sm text-slate-500 group-hover:text-green-500">
-                  0
-                </span>
-              </div>
+                label={post.comments?.length || 0}
+              />
+
+              {/* Add repost icon*/}
+              <PostMenu Icon={BiRepost} label={0} iconSize={6} />
               <div
                 className="flex gap-1 items-center group cursor-pointer"
                 onClick={handleLikePost}
               >
+                {/*Add liek icon*/}
                 {/*Check is it pending */}
                 {!isLiked && !isLikePending && (
                   <FaRegHeart className="w-4 h-4 cursor-pointer text-slate-500 group-hover:text-pink-500" />

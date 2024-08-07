@@ -11,7 +11,7 @@ import Notification from "./pages/Notification/Notification";
 import Navbar from "./components/Navbar/Navbar";
 import Explore from "./components/Explore/Explore";
 import Profile from "./pages/Profile/Profile";
-import LoadingSpinner from "./components/Common/LoadingSpinner";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 function App() {
   // Set authUser state to protect auth route using useQuery
